@@ -1,0 +1,27 @@
+span {
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+
+.login {
+  background-color: cadetblue;
+  border-radius: 4px;
+  padding: 10px;
+  color: beige;
+  width: 100px;
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+.navbar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.navlogo {
+  display: flex;
+  flex-direction: row;
+}
+.nav-content {
+  display: inline;
+  padding: 10px;
+}
