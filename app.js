@@ -7,8 +7,9 @@ const PORT = 8000;
 const router = require("./router/index");
 const bodyParser = require("body-parser");
 const multer = require("multer");
+const fs = require("fs");
+const pdf2img = require("pdf2img");
 
-//Config of body-parser
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -47,6 +48,7 @@ const upload = multer({
   storage: multerStorage,
   fileFilter: multerFilter,
 });
+
 app.post("/api/uploadFile", upload.single("myFile"), async (req, res) => {
   // console.log(req.file);
   try {
@@ -58,15 +60,26 @@ app.post("/api/uploadFile", upload.single("myFile"), async (req, res) => {
       status: "success",
       message: "File Created Successfully!!",
     });
+    // return res.redirect("/api/getFiles");
   } catch (error) {
     res.json({
       error,
     });
   }
 });
+// {"_id":"6173f5c93f160f3cdd41fe12","name":"files/admin-myFile-1634989513574.pdf","createdAt":"2021-10-23T11:45:13.608Z","__v":0}]}
 app.get("/api/getFiles", async (req, res) => {
   try {
     const files = await File.find();
+    const input = path.join(__dirname + `/assets/files/${files.name}`);
+    pdf2img.setOptions({
+      type: "png",
+      size: 1024,
+      density: 600,
+      ouputdir: path.join(__dirname + "/assets/convert"),
+      outputname: ``,
+    });
+
     res.status(200).json({
       status: "success",
       files,
