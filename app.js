@@ -8,8 +8,70 @@ const router = require("./router/index");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const fs = require("fs");
-const pdf2img = require("pdf2img");
+const pdf = require("pdf-poppler");
+const docxConverter = require("docx-pdf");
 
+//Image to PDf
+// const PDFDocument = require("pdfkit");
+// const doc = new PDFDocument();
+
+// doc.pipe(fs.createWriteStream("output1.pdf"));
+
+// doc.image(path.join(__dirname + "/assets/output/one-1.jpg"), {
+//   fit: [650, 700],
+//   align: "left",
+//   valign: "top",
+// });
+// doc.addPage().image(path.join(__dirname + "/assets/output/one-2.jpg"), {
+//   fit: [650, 700],
+//   align: "left",
+//   valign: "top",
+// });
+// doc.end();
+
+//End of image to PDF
+const input = path.join(
+  __dirname + "/assets/files/admin-myFile-1634968940629.pdf"
+);
+const output = path.join(__dirname + "/assets/output/jorsan.pdf");
+const file = "./salbegh.docx";
+
+//DocX to Pdf COnverter
+
+// docxConverter(file, output, (err, result) => {
+//   if (err) {
+//     console.log(`Error Converting File:${err}`);
+//   }
+//   console.log("result" + result);
+// });
+
+//
+
+//Convert Pdf to Image
+
+// let file = "./one.pdf";
+
+// pdf.info(file).then((pdfinfo) => {
+//   console.log(pdfinfo);
+// });
+
+// let opts = {
+//   format: "jpeg",
+//   out_dir: path.join(__dirname + "/assets/output"),
+//   out_prefix: path.basename(file, path.extname(file)),
+//   page: null,
+// };
+
+// pdf
+//   .convert(file, opts)
+//   .then((res) => {
+//     console.log("Successfully Converter");
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
+//End of Pdf to Image
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -35,18 +97,36 @@ const multerStorage = multer.diskStorage({
 });
 
 //Creating my own Filter So that only a single type of file will be uploaded
-
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.split("/")[1] === "pdf") {
+const imageFilter = function (req, file, cb) {
+  if (
+    file.mimetype.split("/")[1] == "png" ||
+    file.mimetype.split("/")[1] == "jpg" ||
+    file.mimetype.split("/")[1] == "jpeg" ||
+    file.mimetype.split("/")[1] == "pdf" ||
+    file.mimetype.split("/")[1] == "docx" ||
+    file.mimetype.split("/")[1] == "doc"
+  ) {
     cb(null, true);
   } else {
-    cb(new Error("Not a PDF File!!"), false);
+    cb(null, false);
+    return cb(
+      new Error("Only .png, .jpg and .jpeg pdf docx docformat allowed!")
+    );
   }
 };
 
+// var upload = multer({ storage: storage, fileFilter: imageFilter });
+// const multerFilter = (req, file, cb) => {
+//   if (file.mimetype.split("/")[1] === "pdf") {
+//     cb(null, true);
+//   } else {
+//     cb(new Error("Not a PDF or JPG or DOCX File!!"), false);
+//   }
+// };
+
 const upload = multer({
   storage: multerStorage,
-  fileFilter: multerFilter,
+  fileFilter: imageFilter,
 });
 
 app.post("/api/uploadFile", upload.single("myFile"), async (req, res) => {
@@ -71,14 +151,6 @@ app.post("/api/uploadFile", upload.single("myFile"), async (req, res) => {
 app.get("/api/getFiles", async (req, res) => {
   try {
     const files = await File.find();
-    const input = path.join(__dirname + `/assets/files/${files.name}`);
-    pdf2img.setOptions({
-      type: "png",
-      size: 1024,
-      density: 600,
-      ouputdir: path.join(__dirname + "/assets/convert"),
-      outputname: ``,
-    });
 
     res.status(200).json({
       status: "success",
@@ -92,7 +164,6 @@ app.get("/api/getFiles", async (req, res) => {
   }
 });
 app.get("/", router);
-
 app.listen(PORT, (err) => {
   if (err) {
     console.log(err);
