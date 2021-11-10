@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
@@ -17,101 +16,44 @@
     <!-- Here i Include Header -->
     <%- include('partials/header') %>
     <!-- The jumbotron Part  -->
-    <section class="jumbotron">
-      <div class="row-jumbotron">
-        <div class="left-jumbotron">
-          <h1>We make PDF easy</h1>
-          <p>
-            All the tools you’ll need to be more productive and work smarter
-            with documents.
-          </p>
-          <div class="jumbobuttons">
-            <button class="freetrials">Start Free Trial</button>
-            <button class="exploreallpdfs">Explore All PDF Tools</button>
-          </div>
-        </div>
-        <div class="right-jumbotron">
-          <img class="pdfimage" src="/images/pdfimage.jpg" />
-        </div>
-      </div>
-    </section>
-    <!-- The main functionality ui for which we can converts the pdfs -->
-    <section class="toolsup">
-      <h1>Most Popular PDF Tools</h1>
-      <p>
-        21 tools to convert, compress, and edit PDFs for free. Try it out today!
-      </p>
-      <div class="card-flex">
-        <% for(let i of cardContents) { %>
-        <div class="card-content">
-          <i class="fa fa-home cardImg"></i>
-          <div class="card-text">
-            <h5><%= i.title %></h5>
-            <p><%= i.content %></p>
-          </div>
-          <i class="fas fa-chevron-right card-right"></i>
-        </div>
-        <%} %>
-      </div>
-    </section>
-    <!-- <section class="toolsup">
-      <h1>Most Popular PDF Tools</h1>
-      <p>
-        21 tools to convert, compress, and edit PDFs for free. Try it out today!
-      </p>
-      <div class="card-content">
-        <i class="fa fa-home cardImg"></i>
-        <div class="card-text">
-          <h5>PDF TO WORD</h5>
-          <p>Convert PDF TO Editable word documents</p>
-        </div>
-        <i class="fas fa-chevron-right card-right"></i>
-      </div>
-    </section> -->
-    <section class="leftrightcontent">
-      <% for(let j of thirdStage) { %>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" id="file"/><br/>
+        <input type="submit" value="upload file">
+        <form action="/pdfImg">
+        <button type="submit" value="convertFile">PDfToImg</button>
+        </form>
+       
+      </form><br/><br/>
+      <% if(data.length > 0){%>
+          <table>
+              <thead>
+                  <tr>
+                      <th>Images</th>
+                      <th>Download</th>
+                     
+                  </tr>
+              </thead>
+              <tbody>
+                <% for(let i=0;i<data.length;i++){%>
+                  <tr>
+                      <td><img src="<%= data[i].filePath %>" alt="images" width="100px" height="100px"/></td>
 
-      <div class="row-jumbotron">
-        <div class="left-jumbotron">
-          <h1><%= j.heading %></h1>
-          <p><%= j.paragraph %></p>
-          <br />
-          <form action="/pdfupload" method="POST" enctype="multipart/form-data">
-            <button class="editpdf"><%= j.anchorTag %></button>
-          </form>
-        </div>
-        <div class="right-jumbotron">
-          <!-- If you face any problem then remove the "" from src and all the code works fine -->
-          <!-- <img class="pdfimage" src=<%= j.image %> /> -->
-        </div>
-      </div>
-      <%} %>
-    </section>
-    <section class="twolines">
-      <h1>Keep Your Simple Tasks Simple</h1>
-      <p>
-        Smallpdf is the first and only PDF software you’ll love. We have all the
-        tools you’ll need to start, manage, and finish your work with digital
-        documents.
-      </p>
-    </section>
+                      <!-- <td><a href="<%= data[i].url %>">Download</a> -->
+                      </td>
+                      <td>
+                      <form action="/download/<%=  data[i]._id %>">
+                        <input type="submit" value="download">
+                      </form>
+                       <form action="/imgToPDf/ <%= data[i]._id %>">
+        <input type="submit" value="convertFile">
+        </form>
+                      </td>
+                  <%} %>   
+              </tbody>
+          </table>
+        <%}%>
+      <div class="jumbotron">
 
-    <section class="chooseus">
-      <h1>Why Choose small Pdf</h1>
-
-      <div class="card-flex2">
-        <% for(let k of chooseUs) { %>
-        <div class="card-contents">
-          <i class="fa fa-home cardImg"></i>
-          <div class="card-text">
-            <h5><%= k.title %></h5>
-            <p><%= k.content %></p>
-          </div>
-          <i class="fas fa-chevron-right card-right"></i>
-        </div>
-        <%} %>
-      </div>
-    </section>
     <%- include('partials/footer.ejs') %>
   </body>
 </html>
