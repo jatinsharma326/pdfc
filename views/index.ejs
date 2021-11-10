@@ -9,6 +9,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
     <link rel="stylesheet" href="/css/header.css" />
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/style.css" />
@@ -35,6 +39,23 @@
         </div>
       </div>
     </section>
+    <section>
+      <h1>Image to PDf</h1>
+      <form action="/imageToPdf" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <input
+            type="file"
+            name="files"
+            multiple
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <button class="btn btn-danger btn-block">Convert to PDf</button>
+        </div>
+      </form>
+    </section>
     <!-- The main functionality ui for which we can converts the pdfs -->
     <section class="toolsup">
       <h1>Most Popular PDF Tools</h1>
@@ -54,6 +75,8 @@
         <%} %>
       </div>
     </section>
+    <br /><br />
+
     <!-- <section class="toolsup">
       <h1>Most Popular PDF Tools</h1>
       <p>
@@ -87,6 +110,26 @@
       </div>
       <%} %>
     </section>
+    <br /><br />
+    <section>
+      <h1>DOCX TO PDF</h1>
+      <form action="/docxtopdf" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+          <input
+            type="file"
+            name="documents"
+            multiple
+            required
+            class="form-control"
+          />
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-danger btn-block">
+            Convert to PDf
+          </button>
+        </div>
+      </form>
+    </section>
     <section class="twolines">
       <h1>Keep Your Simple Tasks Simple</h1>
       <p>
@@ -113,5 +156,6 @@
       </div>
     </section>
     <%- include('partials/footer.ejs') %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   </body>
 </html>
