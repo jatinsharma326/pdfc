@@ -118,37 +118,37 @@ app.post("/pdfToImg", pdftoImageUpload.single("pdfFile"), (req, res) => {
     });
   });
 });
-// const DocumentFilter = (req, file, cb) => {
-//   let ext = path.extname(file.originalname);
-//   if (ext !== ".docx" && ext !== ".doc") {
-//     return cb("This Extension is not supported");
-//   }
-//   cb(null, true);
-// };
-// const word = multer({ storage: storage, fileFilter: DocumentFilter });
+const DocumentFilter = (req, file, cb) => {
+  let ext = path.extname(file.originalname);
+  if (ext !== ".docx" && ext !== ".doc") {
+    return cb("This Extension is not supported");
+  }
+  cb(null, true);
+};
+const word = multer({ storage: storage, fileFilter: DocumentFilter });
 
-// // app.post("/docxtopdf", word.single("documents"), (req, res) => {
-// //   if (req.file) {
-// //     console.log(req.file.path);
-// //     let x = fs.readFileSync(req.file.path);
-// //     libre.convert(x, ".pdf", undefined, (err, done) => {
-// //       if (err) {
-// //         console.log(err);
-// //         fs.unlinkSync(req.file.path);
-// //         fs.unlinkSync(outputPdfPath);
-// //       }
-// //       fs.writeFileSync(outputPdfPath, done);
-// //       res.download(outputPdfPath, (err) => {
-// //         if (err) {
-// //           fs.unlinkSync(req.file.path);
-// //           fs.unlinkSync(outputPdfPath);
-// //         }
-// //         fs.unlinkSync(req.file.path);
-// //         fs.unlinkSync(outputPdfPath);
-// //       });
-// //     });
-// //   }
-// // });
+app.post("/docxtopdf", word.single("documents"), (req, res) => {
+  if (req.file) {
+    console.log(req.file.path);
+    let x = fs.readFileSync(req.file.path);
+    libre.convert(x, ".pdf", undefined, (err, done) => {
+      if (err) {
+        console.log(err);
+        fs.unlinkSync(req.file.path);
+        fs.unlinkSync(outputPdfPath);
+      }
+      fs.writeFileSync(outputPdfPath, done);
+      res.download(outputPdfPath, (err) => {
+        if (err) {
+          fs.unlinkSync(req.file.path);
+          fs.unlinkSync(outputPdfPath);
+        }
+        fs.unlinkSync(req.file.path);
+        fs.unlinkSync(outputPdfPath);
+      });
+    });
+  }
+});
 
 app.listen(PORT, (err) => {
   if (err) {
