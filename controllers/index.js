@@ -73,7 +73,7 @@ const leftrightContent = [
 
 module.exports.home = (req, res) => {
   return res.render("index", {
-    title: "Pdftostart",
+    title: "startpdf",
     cardContents: cardContent,
     thirdStage: leftrightContent,
     chooseUs: chooseUS,
