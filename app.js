@@ -10,7 +10,7 @@ const { exec } = require("child_process");
 const pdftoImage = require("pdftoimage");
 const libre = require("libreoffice-convert");
 const outputFilePath = Date.now() + "output.pdf";
-const outputPdfPath = Date.now() + "output1.pdf";
+// const outputPdfPath = Date.now() + "output1.pdf";
 const outputPdfIPath = Date.now() + "output1.png";
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -82,19 +82,42 @@ app.post("/imageToPdf", upload.array("files", 1000), (req, res) => {
   });
 });
 
-// const pdftoImageFilter = (req, file, cb) => {
-//   let ext = path.extname(file.originalname);
-//   if (ext !== ".pdf") {
-//     return cb("This Extension is not supported");
-//   }
-//   cb(null, true);
-// };
+const pdftoImageFilter = (req, file, cb) => {
+  let ext = path.extname(file.originalname);
+  if (ext !== ".pdf") {
+    return cb("This Extension is not supported");
+  }
+  cb(null, true);
+};
 
-// const pdftoImageUpload = multer({
-//   storage: storage,
-//   fileFilter: pdftoImageFilter,
-// });
-
+const pdftoImageUpload = multer({
+  storage: storage,
+  fileFilter: pdftoImageFilter,
+});
+app.post("/pdfToImg", pdftoImageUpload.single("pdfFile"), (req, res) => {
+  let pdflist = "";
+  if (req.file) {
+    console.log(req.file);
+    console.log(req.file.path);
+    pdflist += `${req.file.path}`;
+  }
+  exec(`magick convert ${pdflist} ${outputPdfIPath}`, (err, stderr, stdout) => {
+    if (err) {
+      console.log(err);
+      fs.unlinkSync(pdflist);
+      fs.unlinkSync(outputPdfIPath);
+    }
+    console.log(outputPdfIPath);
+    res.download(outputPdfIPath, (err) => {
+      if (err) {
+        fs.unlinkSync(pdflist);
+        fs.unlinkSync(outputPdfIPath);
+      }
+      fs.unlinkSync(pdflist);
+      fs.unlinkSync(outputPdfIPath);
+    });
+  });
+});
 // const DocumentFilter = (req, file, cb) => {
 //   let ext = path.extname(file.originalname);
 //   if (ext !== ".docx" && ext !== ".doc") {
