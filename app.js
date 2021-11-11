@@ -10,7 +10,7 @@ const { exec } = require("child_process");
 const pdftoImage = require("pdftoimage");
 const libre = require("libreoffice-convert");
 const outputFilePath = Date.now() + "output.pdf";
-// const outputPdfPath = Date.now() + "output1.pdf";
+const outputPdfPath = Date.now() + "output1.pdf";
 const outputPdfIPath = Date.now() + "output1.png";
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
