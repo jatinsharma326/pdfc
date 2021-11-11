@@ -72,6 +72,9 @@ const leftrightContent = [
 ];
 
 module.exports.home = (req, res) => {
+  let result = "App is running";
+  res.send(result);
+
   return res.render("index", {
     title: "smallPdf",
     cardContents: cardContent,
